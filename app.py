@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Load the model
+
 with open("model.pkl", "rb") as f:
     model = pickle.load(f)
 
@@ -23,7 +23,7 @@ def predict():
         Features = np.array([
             data['CreditScore'],
             data['Geography'],  
-            0 if data['Gender'] == "Male" else 1,  #
+            0 if data['Gender'] == "Male" else 1,  
             data['Age'],
             data['Tenure'],
             data['Balance'],
