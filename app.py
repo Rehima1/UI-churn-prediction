@@ -20,11 +20,10 @@ def predict():
     try:
         data = request.json
         
-        # Ensure data is preprocessed before passing to the model
         Features = np.array([
             data['CreditScore'],
-            data['Geography'],  # If Geography is categorical, encode it
-            0 if data['Gender'] == "Male" else 1,  # Binary encoding for Gender
+            data['Geography'],  
+            0 if data['Gender'] == "Male" else 1,  #
             data['Age'],
             data['Tenure'],
             data['Balance'],
@@ -34,7 +33,7 @@ def predict():
             data['EstimatedSalary']
         ]).reshape(1, -1)
         
-        # Make prediction
+       
         prediction = model.predict(Features)[0]
 
         return jsonify({"prediction": int(prediction)})
@@ -44,5 +43,5 @@ def predict():
 
 
 if __name__ == "__main__":
-    port = os.getenv("PORT", 5000)  # Get the port dynamically for Render
+    port = os.getenv("PORT", 5000)  
     app.run(host="0.0.0.0", port=int(port), debug=True)
