@@ -12,52 +12,44 @@ model_path = "C:\Users\Rehima\OneDrive\سطح المكتب\JS\model.pkl"
 with open(model_path, "rb") as f:
     model = pickle.load(f)
 
-@app.route("/", methods=["GET"])
-def home():
-    return "Welcome to the Customer Churn Prediction API!"
-
-def preprocess_geography(geography):
-    if geography == "France":
-        return [1, 0, 0]
-    elif geography == "Germany":
-        return [0, 1, 0]
-    elif geography == "Spain":
-        return [0, 0, 1]
-    else:
-        raise ValueError("Invalid Geography value")
-
-
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
         data = request.json
         
-        geography_germany = 1 if data['Geography'] == "Germany" else 0
-        geography_spain = 1 if data['Geography'] == "Spain" else 0
-        gender_encoded = 0 if data['Gender'] == "Male" else 1
-        
-        features = np.array([
-            gender_encoded,  
-            data['Age'],
-            data['Tenure'],
-            data['Balance'],
-            data['NumOfProducts'],
-            data['HasCrCard'],
-            data['IsActiveMember'],
-            data['EstimatedSalary'],
-            geography_germany, 
-            geography_spain     
-        ]).reshape(1, -1) 
+        # Handle Geography encoding (one-hot encoding)
+        geography = data['Geography']
+        geography_germany = 1 if geography == "Germany" else 0
+        geography_spain = 1 if geography == "Spain" else 0
+        # For other countries (like France), both will be 0
+        geography_france = 1 if geography == "France" else 0
 
+        # Handle Gender encoding (0 for Male, 1 for Female)
+        gender = data['Gender']
+        gender_male = 0 if gender == "Male" else 1  # Male: 0, Female: 1
+
+        # Prepare the feature array (ensure it contains the correct order and number of features)
+        features = np.array([
+            data['CreditScore'],        # Numeric feature
+            gender_male,               # Gender (encoded as 0 or 1)
+            data['Age'],               # Numeric feature
+            data['Tenure'],            # Numeric feature
+            data['Balance'],           # Numeric feature
+            data['NumOfProducts'],     # Numeric feature
+            data['HasCrCard'],         # Binary feature (0 or 1)
+            data['IsActiveMember'],    # Binary feature (0 or 1)
+            data['EstimatedSalary'],   # Numeric feature
+            geography_germany,         # One-hot encoded geography feature (Germany)
+            geography_spain            # One-hot encoded geography feature (Spain)
+        ]).reshape(1, -1)  # Reshape for model input (1 sample with multiple features)
+
+        # Ensure features are numeric and pass them to the model
         prediction = model.predict(features)[0]
-        
+
         return jsonify({"prediction": int(prediction)})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-
-
 if __name__ == "__main__":
-    port = os.getenv("PORT", 5000)  
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True)
