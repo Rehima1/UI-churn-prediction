@@ -31,23 +31,24 @@ def preprocess_geography(geography):
 def predict():
     try:
         data = request.json
-        geography_encoded = preprocess_geography(data['Geography'])
-
-        # Prepare the features for prediction
+        
+        geography_germany = 1 if data['Geography'] == "Germany" else 0
+        geography_spain = 1 if data['Geography'] == "Spain" else 0
+        gender_encoded = 0 if data['Gender'] == "Male" else 1
+        
         features = np.array([
-            data['CreditScore'],
-            geography_encoded, 
-            0 if data['Gender'] == "Male" else 1,
+            gender_encoded,  
             data['Age'],
             data['Tenure'],
             data['Balance'],
             data['NumOfProducts'],
             data['HasCrCard'],
             data['IsActiveMember'],
-            data['EstimatedSalary']
-        ]).reshape(1, -1)
-        
-        # Make prediction
+            data['EstimatedSalary'],
+            geography_germany, 
+            geography_spain     
+        ]).reshape(1, -1) 
+
         prediction = model.predict(features)[0]
         
         return jsonify({"prediction": int(prediction)})
