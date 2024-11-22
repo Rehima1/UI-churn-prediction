@@ -36,7 +36,7 @@ def predict():
         # Prepare the features for prediction
         features = np.array([
             data['CreditScore'],
-            *geography_encoded,  # Add one-hot encoded geography
+            geography_encoded, 
             0 if data['Gender'] == "Male" else 1,
             data['Age'],
             data['Tenure'],
