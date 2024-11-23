@@ -16,37 +16,34 @@ with open(model_path, "rb") as f:
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        data = request.json
-        print("Received Data:", data)  
+        data = request.json  
+        print("Received Data:", data)
 
-        required_fields = [
-            'CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts',
-            'HasCrCard', 'IsActiveMember', 'EstimatedSalary', 'Geography', 'Gender'
-        ]
-        for field in required_fields:
-            if field not in data:
-                return jsonify({"error": f"Missing field: {field}"}), 400
+        geography_germany = 1 if data["Geography"] == "Germany" else 0
+        geography_spain = 1 if data["Geography"] == "Spain" else 0
+        gender = 0 if data["Gender"] == "Male" else 1
 
         Features = np.array([
-            data['CreditScore'],
-            0 if data['Gender'] == 'Male' else 1,
-            data['Age'],
-            data['Tenure'],
-            data['Balance'],
-            data['NumOfProducts'],
-            data['HasCrCard'],
-            data['IsActiveMember'],
-            data['EstimatedSalary'],
-            1 if data['Geography'] == 'Germany' else 0, 
-            1 if data['Geography'] == 'Spain' else 0,    
-        ]).reshape(1, -1)  
+            data["CreditScore"],
+            gender, 
+            data["Age"],
+            data["Tenure"],
+            data["Balance"],
+            data["NumOfProducts"],
+            data["HasCrCard"],
+            data["IsActiveMember"],
+            data["EstimatedSalary"],
+            geography_germany, 
+            geography_spain     
+        ]).reshape(1, -1)
 
-        prediction = model.predict(Features)[0] 
+        prediction = model.predict(Features)[0]
 
         return jsonify({"prediction": int(prediction)})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
     
 if __name__ == "__main__":
     port = os.getenv("PORT", 5000)  
