@@ -17,24 +17,25 @@ with open(model_path, "rb") as f:
 def predict():
     try:
         data = request.json  
-        print("Received Data:", data)
+        print("Received Data:", data)  
+        
+        gender = 0 if data['Gender'] == 'Male' else 1
 
-        geography_germany = 1 if data["Geography"] == "Germany" else 0
-        geography_spain = 1 if data["Geography"] == "Spain" else 0
-        gender = 0 if data["Gender"] == "Male" else 1
+        geography_germany = 1 if data['Geography'] == 'Germany' else 0
+        geography_spain = 1 if data['Geography'] == 'Spain' else 0
 
         Features = np.array([
-            data["CreditScore"],
-            gender, 
-            data["Age"],
-            data["Tenure"],
-            data["Balance"],
-            data["NumOfProducts"],
-            data["HasCrCard"],
-            data["IsActiveMember"],
-            data["EstimatedSalary"],
+            data['CreditScore'],
+            gender,  
+            data['Age'],
+            data['Tenure'],
+            data['Balance'],
+            data['NumOfProducts'],
+            data['HasCrCard'],
+            data['IsActiveMember'],
+            data['EstimatedSalary'],
             geography_germany, 
-            geography_spain     
+            geography_spain    
         ]).reshape(1, -1)
 
         prediction = model.predict(Features)[0]
@@ -43,7 +44,6 @@ def predict():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
-
     
 if __name__ == "__main__":
     port = os.getenv("PORT", 5000)  
