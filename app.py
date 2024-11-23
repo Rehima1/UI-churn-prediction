@@ -7,26 +7,23 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-
-model_path = os.getenv("MODEL_PATH", "model.pkl")
+model_path = "model.pkl" 
 with open(model_path, "rb") as f:
     model = pickle.load(f)
 
+@app.route("/", methods=["GET"])
+def home():
+    return "Welcome to the Customer Churn Prediction API!"
 
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        data = request.json  
-        print("Received Data:", data)  
-        
-        gender = 0 if data['Gender'] == 'Male' else 1
-
-        geography_germany = 1 if data['Geography'] == 'Germany' else 0
-        geography_spain = 1 if data['Geography'] == 'Spain' else 0
+        data = request.json 
+        print("Received Data:", data)
 
         Features = np.array([
             data['CreditScore'],
-            gender,  
+            0 if data['Gender'] == 'Male' else 1, 
             data['Age'],
             data['Tenure'],
             data['Balance'],
@@ -34,17 +31,18 @@ def predict():
             data['HasCrCard'],
             data['IsActiveMember'],
             data['EstimatedSalary'],
-            geography_germany, 
-            geography_spain    
+            1 if data['Geography'] == 'Germany' else 0, 
+            1 if data['Geography'] == 'Spain' else 0    
         ]).reshape(1, -1)
 
+        # Make prediction
         prediction = model.predict(Features)[0]
 
         return jsonify({"prediction": int(prediction)})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
-    
+
 if __name__ == "__main__":
     port = os.getenv("PORT", 5000)  
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)
