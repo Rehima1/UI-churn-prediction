@@ -12,19 +12,6 @@ model_path = os.getenv("MODEL_PATH", "model.pkl")
 with open(model_path, "rb") as f:
     model = pickle.load(f)
 
-@app.route("/", methods=["GET"])
-def home():
-    return "Welcome to the Customer Churn Prediction API!"
-
-def preprocess_geography(geography):
-    if geography == "Germany":
-        return [1, 0]
-    elif geography == "Spain":
-        return [0, 1]
-    elif geography == "France":  
-        return [0, 0]
-    else:
-        raise ValueError("Invalid Geography value")
 
 @app.route("/predict", methods=["POST"])
 def predict():
