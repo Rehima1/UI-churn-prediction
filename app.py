@@ -30,8 +30,8 @@ def preprocess_geography(geography):
 def predict():
     try:
         data = request.json
+        print("Received Data:", data)  
 
-        # Ensure all required fields are present
         required_fields = [
             'CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts',
             'HasCrCard', 'IsActiveMember', 'EstimatedSalary', 'Geography', 'Gender'
@@ -40,9 +40,9 @@ def predict():
             if field not in data:
                 return jsonify({"error": f"Missing field: {field}"}), 400
 
-        # Preprocessing
         Features = np.array([
             data['CreditScore'],
+            0 if data['Gender'] == 'Male' else 1,
             data['Age'],
             data['Tenure'],
             data['Balance'],
@@ -50,23 +50,17 @@ def predict():
             data['HasCrCard'],
             data['IsActiveMember'],
             data['EstimatedSalary'],
-            1 if data['Geography'] == 'Germany' else 0,
-            1 if data['Geography'] == 'Spain' else 0,
-            0 if data['Gender'] == 'Male' else 1
-        ]).reshape(1, -1)
+            1 if data['Geography'] == 'Germany' else 0, 
+            1 if data['Geography'] == 'Spain' else 0,    
+        ]).reshape(1, -1)  
 
-        # Predict
-        prediction = model.predict(Features)[0]
+        prediction = model.predict(Features)[0] 
 
         return jsonify({"prediction": int(prediction)})
 
-    except ValueError as ve:
-        return jsonify({"error": f"Invalid value: {ve}"}), 400
-    except KeyError as ke:
-        return jsonify({"error": f"Missing key: {ke}"}), 400
     except Exception as e:
-        return jsonify({"error": f"Unexpected error: {e}"}), 500
-
+        return jsonify({"error": str(e)}), 400
+    
 if __name__ == "__main__":
     port = os.getenv("PORT", 5000)  
     app.run(host='0.0.0.0', port=5000, debug=True)
