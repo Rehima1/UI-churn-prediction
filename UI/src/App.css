@@ -6,7 +6,7 @@
   
   body {
     font-family: 'Arial', sans-serif;
-    background-color: #ced7e7;
+    background: linear-gradient(135deg, #a7e3bd, #b6dee8);
     color: #191818;
     line-height: 1.6;
     display: flex;
@@ -14,82 +14,111 @@
     align-items: center;
     height: 100vh;
     padding: 20px;
+    overflow: hidden;
   }
   
-  
-  /* Container to hold the entire page layout */
+  /* App Container */
   .App {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
     padding: 20px;
+    width: 100%;
   }
   
-  /* Styling for the form container */
   form {
     width: 100%;
-    max-width: 600px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
+    max-width: 1000px; 
+    padding: 40px;
+    border-radius: 12px; 
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.7);
     margin-top: 20px;
+    animation: fadeIn 0.7s ease-in-out;
+    height: 500px; 
+    overflow-y: auto; 
   }
   
-  /* Center the form content */
+  /* Label Styling */
   form label {
     display: block;
-    margin: 10px 0;
-    font-size: 16px;
+    margin: 15px 0 5px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
   }
   
-  /* Input fields */
+  /* Input and Select Styling */
   input, select {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: calc(100% - 20px); /* Adjust to prevent overflow inside wider form */
+    padding: 14px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    transition: all 0.3s ease;
   }
   
-  /* Buttons styling */
+  input:focus, select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+  }
+  
+  /* Buttons Styling */
   .buttons {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
   }
   
   button {
-    padding: 10px 20px;
+    padding: 14px 40px;
     border: none;
-    background-color: #007bff;
+    border-radius: 12px;
+    background: linear-gradient(45deg, #6db8dd, #58a27c);
     color: white;
-    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
   }
   
-  button:disabled {
-    background-color: #cccccc;
+  button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #076948, #003d80);
   }
   
+  /* Result and Error Boxes */
   .result, .error {
     margin-top: 20px;
-    padding: 10px;
-    border-radius: 4px;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: bold;
+    text-align: center;
   }
   
   .result {
-    background-color: #d4edda;
-    color: #155724;
+    background: #d4f4dd;
+    color: #1d631d;
+    box-shadow: 0 5px 15px rgba(0, 200, 0, 0.2);
   }
   
   .error {
-    background-color: #f8d7da;
-    color: #721c24;
+    background: #fbd9d9;
+    color: #a80000;
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
   }
   
-  form {
-    max-height: 590px; 
-    overflow-y: auto;
+  /* Add Subtle Entry Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  
