@@ -1,0 +1,95 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #ced7e7;
+    color: #191818;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+  }
+  
+  
+  /* Container to hold the entire page layout */
+  .App {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  /* Styling for the form container */
+  form {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+  }
+  
+  /* Center the form content */
+  form label {
+    display: block;
+    margin: 10px 0;
+    font-size: 16px;
+  }
+  
+  /* Input fields */
+  input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Buttons styling */
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #cccccc;
+  }
+  
+  .result, .error {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .result {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  form {
+    max-height: 590px; 
+    overflow-y: auto;
+  }
+  
